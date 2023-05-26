@@ -3,13 +3,22 @@ import {
     Button,
     Flex,
     FormControl,
-    Heading,
     Input,
     Stack,
     Text,
 } from "@chakra-ui/react";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "../api/api";
+import { useParams } from "react-router-dom";
 
 export const Chat = () => {
+    const { channelId } = useParams();
+    console.log(channelId)
+    const { data: messages } = useQuery({
+        queryKey: ["messages"],
+        queryFn: () => api.getChannelMessages(channelId),
+    });
+    console.log(messages);
     return (
         <Flex
             flexBasis="80%"
@@ -23,9 +32,7 @@ export const Chat = () => {
                     src="https://bit.ly/dan-abramov"
                     mr={5}
                 ></Avatar>
-                <Text fontSize={`2xl`}>
-                    Conversation with <b>Albert</b>
-                </Text>
+                <Text fontSize={`2xl`}>Математика</Text>
             </Flex>
             <Stack h={`100%`} m={4}>
                 <Flex

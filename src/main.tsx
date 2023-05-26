@@ -2,28 +2,27 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ChakraProvider } from "@chakra-ui/react";
-import { extendTheme, type ThemeConfig } from '@chakra-ui/react'
-
+import { extendTheme, type ThemeConfig } from "@chakra-ui/react";
+import { AuthContextProvider } from "./context/authContext.tsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const config: ThemeConfig = {
-  initialColorMode: 'dark',
-  useSystemColorMode: false,
-}
+    initialColorMode: "dark",
+    useSystemColorMode: false,
+};
 
-const theme = extendTheme({ config })
+const theme = extendTheme({ config });
 
-const router = createBrowserRouter([
-    {
-        path: "/",
-        element: <App />,
-    },
-]);
+
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
-        <ChakraProvider theme={theme}>
-            <RouterProvider router={router} />
-        </ChakraProvider>
+        <QueryClientProvider client={new QueryClient()}>
+            <AuthContextProvider>
+                <ChakraProvider theme={theme}>
+                    <App></App>
+                </ChakraProvider>
+            </AuthContextProvider>
+        </QueryClientProvider>
     </React.StrictMode>
 );

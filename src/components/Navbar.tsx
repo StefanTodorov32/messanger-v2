@@ -1,6 +1,6 @@
 import { Button, Flex } from "@chakra-ui/react";
 import { useContext } from "react";
-import { AuthContext, IContextValues } from "../context";
+import { AuthContext, IContextValues } from "../context/authContext";
 
 export default function Navbar() {
     const { handleSignIn, auth, handleSignOut } = useContext(
