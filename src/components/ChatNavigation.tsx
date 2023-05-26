@@ -10,7 +10,6 @@ export const ChatNavigation = ({
     auth: User;
     channels: DocumentData[] | undefined;
 }) => {
-    // const navigate = useNavigate();
     return (
         <Flex
             flexBasis="20%"

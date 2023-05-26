@@ -1,5 +1,6 @@
-import { collection, getDocs } from "firebase/firestore";
+import { DocumentData, collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
+import { Message } from "../models";
 
 export const api = {
     getChannels: async () => {
@@ -12,14 +13,27 @@ export const api = {
             };
         });
     },
-    getChannelMessages: async (channelId: string | undefined) => {
-        if(channelId == undefined) return []
+    getChannel: async (
+        channelId: string | undefined
+    ): Promise<DocumentData | undefined> => {
+        if (channelId == undefined) return {};
+        const channels = await api.getChannels();
+        return channels.find((channel) => channel.id === channelId);
+    },
+    getChannelMessages: async (
+        channelId: string | undefined
+    ): Promise<Message[] | undefined> => {
+        if (channelId == undefined) return [];
         const messagesRef = collection(db, "channels", channelId, "messages");
         const messagesSnapshot = await getDocs(messagesRef);
         return messagesSnapshot.docs.map((doc) => {
+            const data = doc.data();
             return {
                 id: doc.id,
-                ...doc.data(),
+                text: data.text,
+                createdBy: data.createdBy,
+                timestamp: data.timestamp,
+                sendBy: data.sendBy,
             };
         });
     },

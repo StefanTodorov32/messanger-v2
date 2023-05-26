@@ -1,5 +1,4 @@
 import { Flex } from "@chakra-ui/react";
-import "./App.css";
 import Navbar from "./components/Navbar";
 import { ChatNavigation } from "./components/ChatNavigation";
 import { useContext } from "react";
@@ -33,7 +32,7 @@ function App() {
                         <Route path="/" element={<div>Select Channel</div>} />
                         <Route
                             path="/channel/:channelId"
-                            element={<Chat />}
+                            element={<Chat auth={auth}/>}
                         ></Route>
                     </Routes>
                 </Flex>
