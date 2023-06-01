@@ -41,8 +41,6 @@ export const Chat = ({ auth }: { auth: User }) => {
             </Flex>
             <Stack h={`100%`} m={4}>
                 {messages?.map((message: Message) => {
-                    console.log(message.sendBy.id);
-                    console.log(auth.uid);
                     return (
                         <Flex
                             key={message.id}

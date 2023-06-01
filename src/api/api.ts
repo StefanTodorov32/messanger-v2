@@ -1,6 +1,6 @@
-import { DocumentData, collection, getDocs } from "firebase/firestore";
+import { DocumentData, addDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
-import { Message } from "../models";
+import { Channel, Message } from "../models";
 
 export const api = {
     getChannels: async () => {
@@ -19,6 +19,11 @@ export const api = {
         if (channelId == undefined) return {};
         const channels = await api.getChannels();
         return channels.find((channel) => channel.id === channelId);
+    },
+    createChannel: async (values: Channel) => {
+        const channelsRef = collection(db, "channels");
+        const data = await addDoc(channelsRef, values);
+        console.log(data)
     },
     getChannelMessages: async (
         channelId: string | undefined

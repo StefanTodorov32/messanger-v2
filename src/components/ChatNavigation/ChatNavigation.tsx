@@ -1,7 +1,15 @@
-import { Avatar, Flex, Heading, Text } from "@chakra-ui/react";
+import {
+    Avatar,
+    Button,
+    Flex,
+    Heading,
+    Text,
+    useDisclosure,
+} from "@chakra-ui/react";
 import { User } from "firebase/auth";
 import { DocumentData } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import { CreateChannel } from "./CreateChannel";
 
 export const ChatNavigation = ({
     auth,
@@ -10,6 +18,7 @@ export const ChatNavigation = ({
     auth: User;
     channels: DocumentData[] | undefined;
 }) => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <Flex
             flexBasis="20%"
@@ -19,25 +28,25 @@ export const ChatNavigation = ({
             flexDirection={`column`}
             justifyContent={`space-between`}
         >
-            <Heading size={"lg"} mb={10}>
-                Channels
-            </Heading>
+            <Button onClick={onOpen} h={50} fontSize={18}>
+                Create Channel
+            </Button>
+            <CreateChannel onClose={onClose} isOpen={isOpen} />
             <Flex flexDirection={`column`}>
                 {channels?.map((channel, i) => (
                     <Link to={`/channel/${channel.id}`} key={i}>
                         <Flex
                             w={"100%"}
-                            bg={"hsl(0, 0%, 15%)"}
+                            bg={"rgba(255, 255, 255, 0.08)"}
                             p={5}
                             mb={5}
                             borderRadius={5}
                             alignItems={`center`}
                             _hover={{
                                 cursor: "pointer",
-                                bg: "hsl(0, 0%, 20%)",
+                                bg: "rgba(255, 255, 255, 0.2)",
                             }}
                             transition={`background-color 0.2s ease-in-out`}
-                            // onClick={() => navigate("/chat/" + channel.id)}
                         >
                             <Avatar
                                 name={channel.name}
@@ -51,14 +60,14 @@ export const ChatNavigation = ({
             </Flex>
             <Flex
                 w={"100%"}
-                bg={"hsl(0, 0%, 15%)"}
+                bg={"rgba(255, 255, 255, 0.08)"}
                 p={5}
                 mb={5}
                 borderRadius={5}
                 alignItems={`center`}
                 _hover={{
                     cursor: "pointer",
-                    bg: "hsl(0, 0%, 20%)",
+                    bg: "rgba(255, 255, 255, 0.2)",
                 }}
                 transition={`background-color 0.2s ease-in-out`}
             >

@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 import Navbar from "./components/Navbar";
-import { ChatNavigation } from "./components/ChatNavigation";
+import { ChatNavigation } from "./components/ChatNavigation/ChatNavigation";
 import { useContext } from "react";
 import { AuthContext, IContextValues } from "./context/authContext";
 import { useQuery } from "@tanstack/react-query";

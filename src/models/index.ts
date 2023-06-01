@@ -3,13 +3,13 @@ import { DocumentReference } from "firebase/firestore";
 export interface Channel {
     name: string;
     description: string;
-    createdBy: DocumentReference;
-    photoUrl: "string";
+    createdBy: string;
+    photoUrl: string;
 }
 
 export interface Message {
     text: string;
-    createdBy: DocumentReference;
+    createdBy: string;
     id: string;
     timestamp: number;
     sendBy: DocumentReference;
