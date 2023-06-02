@@ -1,9 +1,11 @@
 import {
     Avatar,
+    Box,
     Button,
     Flex,
     FormControl,
     Input,
+    Kbd,
     Stack,
     Text,
 } from "@chakra-ui/react";
@@ -39,7 +41,9 @@ export const Chat = ({ auth }: { auth: User }) => {
             if (!channelId) return Promise.reject(undefined);
             return api.sendMessage({ ...values, channelId });
         },
-        onSuccess: () => refetchMessages(),
+        onSuccess: () => {
+            return refetchMessages();
+        },
     });
     const messageContainerRef = useRef<HTMLDivElement>(null);
 
@@ -49,7 +53,6 @@ export const Chat = ({ auth }: { auth: User }) => {
     }, [channelId, refetchMessages, refetchChannel]);
 
     useEffect(() => {
-        // Scroll to the bottom of the message container whenever new messages are added
         if (messageContainerRef.current) {
             messageContainerRef.current.scrollTop =
                 messageContainerRef.current.scrollHeight;
@@ -78,18 +81,39 @@ export const Chat = ({ auth }: { auth: User }) => {
                 overflowY="auto"
             >
                 {messages?.map((message: Message, i: number) => {
+                    const isOwner = message.createdBy == auth.uid;
+                    const date = new Date(message.timestamp);
                     return (
                         <Flex
                             key={i}
-                            alignSelf={`flex-start`}
-                            flexDirection={`column`}
+                            alignSelf={isOwner ? `flex-end` : `flex-start`}
+                            flexDirection={`row`}
                             justifyContent={`flex-start`}
                             m={2}
                             p={3}
-                            bg={`gray.500`}
+                            bg={
+                                isOwner
+                                    ? `blue.500`
+                                    : `rgba(255, 255, 255, 0.08)`
+                            }
                             borderRadius={10}
+                            alignItems={`center`}
                         >
-                            <Text fontSize={`xl`}>{message.text}</Text>
+                            {isOwner ? (
+                                <>
+                                    <Text fontSize={`xl`}>{message.text}</Text>
+                                    <Box bg={`whiteAlpha.200`} ml={2}>
+                                        {date.getHours()}:{date.getHours()}
+                                    </Box>
+                                </>
+                            ) : (
+                                <>
+                                    <Box mr={2}>
+                                        {date.getHours()}:{date.getHours()}
+                                    </Box>
+                                    <Text fontSize={`xl`}>{message.text}</Text>
+                                </>
+                            )}
                         </Flex>
                     );
                 })}
@@ -100,6 +124,7 @@ export const Chat = ({ auth }: { auth: User }) => {
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             setMessage(e.target.value);
                         }}
+                        value={message}
                     />
                     <Button
                         ml={5}
@@ -107,6 +132,7 @@ export const Chat = ({ auth }: { auth: User }) => {
                         variant="solid"
                         color={`white`}
                         onClick={() => {
+                            if (!message || message == "") return;
                             mutation.mutate({
                                 values: {
                                     text: message,
@@ -114,6 +140,7 @@ export const Chat = ({ auth }: { auth: User }) => {
                                     timestamp: Date.now(),
                                 },
                             });
+                            setMessage("");
                         }}
                     >
                         Send
