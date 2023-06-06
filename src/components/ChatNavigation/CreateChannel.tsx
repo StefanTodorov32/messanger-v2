@@ -19,9 +19,11 @@ import { AuthContext, IContextValues } from "../../context/authContext";
 export const CreateChannel = ({
     isOpen,
     onClose,
+    refetchChannels
 }: {
     isOpen: boolean;
     onClose: () => void;
+    refetchChannels: () => void;
 }) => {
     const { auth } = useContext(AuthContext) as IContextValues;
 
@@ -32,6 +34,7 @@ export const CreateChannel = ({
     }) => {
         if (!auth) return;
         await api.createChannel({ ...values, createdBy: auth.uid });
+        refetchChannels()
     };
 
     const initialValues = {
@@ -89,7 +92,7 @@ export const CreateChannel = ({
                                 Close
                             </Button>
                             <Button variant="ghost" type="submit">
-                                Secondary Action
+                                Create
                             </Button>
                         </ModalFooter>
                     </Form>

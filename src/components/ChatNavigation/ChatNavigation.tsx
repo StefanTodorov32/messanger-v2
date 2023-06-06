@@ -14,9 +14,11 @@ import { CreateChannel } from "./CreateChannel";
 export const ChatNavigation = ({
     auth,
     channels,
+    refetchChannels
 }: {
     auth: User;
     channels: DocumentData[] | undefined;
+    refetchChannels: () => void;
 }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
@@ -31,8 +33,12 @@ export const ChatNavigation = ({
             <Button onClick={onOpen} h={50} fontSize={18}>
                 Create Channel
             </Button>
-            <CreateChannel onClose={onClose} isOpen={isOpen} />
-            <Flex flexDirection={`column`}>
+            <CreateChannel onClose={onClose} isOpen={isOpen} refetchChannels={refetchChannels} />
+            <Flex flexDirection={`column`}
+                overflowY="auto"
+                marginTop={4}
+                marginBottom={4}
+            >
                 {channels?.map((channel, i) => (
                     <Link to={`/channel/${channel.id}`} key={i}>
                         <Flex

@@ -10,7 +10,7 @@ import { Chat } from "./components/ChatMessages";
 
 function App() {
     const { auth } = useContext(AuthContext) as IContextValues;
-    const { data: channels } = useQuery({
+    const { data: channels, refetch: refetchChannels } = useQuery({
         queryKey: ["channels"],
         queryFn: async () => api.getChannels(),
     });
@@ -27,7 +27,7 @@ function App() {
                     h={`calc(100vh - 72px)`}
                     overflow={`hidden`}
                 >
-                    <ChatNavigation auth={auth} channels={channels} />
+                    <ChatNavigation auth={auth} channels={channels} refetchChannels={refetchChannels} />
                     <Routes>
                         <Route path="/" element={<div>Select Channel</div>} />
                         <Route

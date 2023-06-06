@@ -5,7 +5,7 @@ import {
     Flex,
     FormControl,
     Input,
-    Kbd,
+    Spinner,
     Stack,
     Text,
 } from "@chakra-ui/react";
@@ -18,7 +18,7 @@ import { useEffect, useRef, useState } from "react";
 
 export const Chat = ({ auth }: { auth: User }) => {
     const { channelId } = useParams<string>();
-    const { data: messages, refetch: refetchMessages } = useQuery({
+    const { data: messages, refetch: refetchMessages, isLoading } = useQuery({
         queryKey: ["messages"],
         queryFn: (): Promise<Message[] | undefined> =>
             api.getChannelMessages(channelId),
@@ -60,6 +60,7 @@ export const Chat = ({ auth }: { auth: User }) => {
     }, [messages]);
 
     return (
+
         <Flex
             flexBasis="80%"
             p={10}
@@ -80,6 +81,19 @@ export const Chat = ({ auth }: { auth: User }) => {
                 ref={messageContainerRef}
                 overflowY="auto"
             >
+                {isLoading &&
+                    <Flex width={`100%`}
+                        height={`100%`}
+                        justifyContent={`center`}
+                        alignItems={`center`}>
+                        <Spinner
+                            thickness='4px'
+                            speed='0.65s'
+                            emptyColor='gray.200'
+                            color='blue.500'
+                            size='xl'
+                        />
+                    </Flex>}
                 {messages?.map((message: Message, i: number) => {
                     const isOwner = message.createdBy == auth.uid;
                     const date = new Date(message.timestamp);
